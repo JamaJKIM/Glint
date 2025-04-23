@@ -24,6 +24,8 @@
     "@electron-forge/maker-zip": "^7.2.0",
     "@electron-forge/publisher-github": "^7.8.0",
     "@types/node": "^20.0.0",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "electron": "^28.0.0",
@@ -32,10 +34,14 @@
   },
   "dependencies": {
     "@electron/remote": "^2.1.0",
+    "dotenv": "^16.5.0",
     "electron-store": "^8.1.0",
     "marked": "^11.1.0",
     "openai": "^4.0.0",
-    "sharp": "^0.33.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sharp": "^0.33.0",
+    "tesseract.js": "^6.0.1"
   },
   "config": {
     "forge": {
@@ -46,13 +52,9 @@
       },
       "makers": [
         {
-          "name": "@electron-forge/maker-squirrel",
+          "name": "@electron-forge/maker-zip",
           "platforms": ["win32"],
-          "config": {
-            "name": "Glint",
-            "setupExe": "Glint Setup.exe",
-            "skipUpdateIcon": true
-          }
+          "config": {}
         },
         {
           "name": "@electron-forge/maker-dmg",
