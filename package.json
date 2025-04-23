@@ -1,0 +1,74 @@
+{
+  "name": "glint",
+  "version": "1.0.0",
+  "description": "Intelligent Screenshot-Based Assistant",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"npm run watch\" \"npm run electron\"",
+    "watch": "tsc -w",
+    "electron": "electron .",
+    "build": "tsc && electron-builder",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/electron": "^1.6.12",
+    "@types/electron-store": "^3.2.2",
+    "@types/node": "^20.11.24",
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19",
+    "@types/tesseract.js": "^2.0.0",
+    "concurrently": "^8.2.2",
+    "electron": "^29.1.0",
+    "electron-builder": "^24.9.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@electron/remote": "^2.0.12",
+    "dotenv": "^16.5.0",
+    "electron-store": "^8.1.0",
+    "marked": "^15.0.9",
+    "openai": "^4.28.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sharp": "^0.33.5",
+    "tesseract.js": "^5.0.4"
+  },
+  "build": {
+    "appId": "com.glint.app",
+    "productName": "Glint",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "files": [
+      "dist/**/*",
+      "public/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "public",
+        "to": "public",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "public"
+    }
+  }
+}
