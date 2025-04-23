@@ -44,7 +44,6 @@
     "openai": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sharp": "^0.34.1",
     "tesseract.js": "^6.0.1"
   },
   "config": {
@@ -52,7 +51,10 @@
       "packagerConfig": {
         "name": "Glint",
         "executableName": "Glint",
-        "asar": false,
+        "asar": true,
+        "asarUnpack": [
+          "node_modules/sharp"
+        ],
         "arch": [
           "x64"
         ],
@@ -76,18 +78,6 @@
           "config": {
             "name": "Glint",
             "format": "ULFO"
-          }
-        }
-      ],
-      "publishers": [
-        {
-          "name": "@electron-forge/publisher-github",
-          "config": {
-            "repository": {
-              "owner": "jameskim",
-              "name": "Glint"
-            },
-            "prerelease": false
           }
         }
       ]

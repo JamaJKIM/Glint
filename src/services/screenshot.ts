@@ -1,6 +1,5 @@
-import { desktopCapturer, screen, Rectangle } from 'electron';
+import { desktopCapturer, screen, Rectangle, nativeImage } from 'electron';
 import { ScreenshotResult } from '../types/screenshot';
-import sharp from 'sharp';
 import { logger } from './logger';
 
 export interface CaptureRegion {
@@ -62,19 +61,16 @@ export async function captureScreen(region?: CaptureRegion): Promise<ScreenshotR
     }
 
     // Get the image buffer and verify it's not empty
-    const imageBuffer = source.thumbnail.toPNG();
-    if (!imageBuffer || imageBuffer.length === 0) {
-      throw new Error('Screenshot capture produced empty buffer');
-    }
+    const fullImage = source.thumbnail;
+    
+    logger.info('Successfully captured screenshot');
 
-    logger.info('Successfully captured screenshot', { bufferSize: imageBuffer.length });
-
-    // If a region is specified, crop the image
+    // If a region is specified, crop the image using native Electron APIs
     if (region) {
       // Scale the region coordinates for Retina displays
       const scaledRegion = {
-        left: Math.round(region.x * scaleFactor),
-        top: Math.round(region.y * scaleFactor),
+        x: Math.round(region.x * scaleFactor),
+        y: Math.round(region.y * scaleFactor),
         width: Math.round(region.width * scaleFactor),
         height: Math.round(region.height * scaleFactor)
       };
@@ -82,19 +78,19 @@ export async function captureScreen(region?: CaptureRegion): Promise<ScreenshotR
       logger.info('Cropping with scaled region', { region: scaledRegion });
 
       try {
-        const croppedImage = await sharp(imageBuffer)
-          .extract(scaledRegion)
-          .toBuffer();
+        // Crop using Electron's nativeImage
+        const croppedImage = fullImage.crop(scaledRegion);
+        const croppedBuffer = croppedImage.toPNG();
 
-        if (!croppedImage || croppedImage.length === 0) {
+        if (!croppedBuffer || croppedBuffer.length === 0) {
           throw new Error('Failed to crop screenshot - empty buffer after crop');
         }
         
-        logger.info('Successfully cropped screenshot', { bufferSize: croppedImage.length });
+        logger.info('Successfully cropped screenshot', { bufferSize: croppedBuffer.length });
         
         return {
           success: true,
-          data: croppedImage.toString('base64')
+          data: croppedBuffer.toString('base64')
         };
       } catch (cropError) {
         logger.error('Error cropping screenshot', { error: cropError });
@@ -103,6 +99,7 @@ export async function captureScreen(region?: CaptureRegion): Promise<ScreenshotR
     }
 
     // If no region specified, return the full screenshot
+    const imageBuffer = fullImage.toPNG();
     logger.info('Returning full screenshot', { bufferSize: imageBuffer.length });
     return {
       success: true,
