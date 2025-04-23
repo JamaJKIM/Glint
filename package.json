@@ -39,37 +39,23 @@
       "packagerConfig": {
         "name": "Glint",
         "executableName": "Glint",
-        "icon": "./assets/icon",
-        "asar": true,
-        "prune": true
+        "asar": true
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
-          "platforms": ["win32"],
           "config": {
             "name": "Glint",
-            "authors": "James Kim",
             "exe": "Glint.exe",
-            "setupExe": "Glint-Setup-Windows.exe",
-            "setupIcon": "./assets/icon.ico"
+            "setupExe": "Glint Setup.exe"
           }
         },
         {
           "name": "@electron-forge/maker-dmg",
-          "platforms": ["darwin"],
           "config": {
             "name": "Glint",
-            "icon": "./assets/icon.icns",
             "format": "ULFO"
           }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin",
-            "win32"
-          ]
         }
       ]
     }
