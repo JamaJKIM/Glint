@@ -1,34 +1,35 @@
+import { platform } from 'os';
 import { globalShortcut } from 'electron';
 
-export function registerHotkey(accelerator: string, callback: () => void): void {
-  // Unregister any existing registration of the accelerator
-  if (globalShortcut.isRegistered(accelerator)) {
-    globalShortcut.unregister(accelerator);
-  }
+// Define the hotkey based on platform
+export const SCREENSHOT_HOTKEY = platform() === 'darwin' 
+  ? 'Command+Shift+X'  // macOS
+  : 'Control+Shift+X'; // Windows/Linux
 
-  // Register the new hotkey
-  const success = globalShortcut.register(accelerator, callback);
-  
-  if (!success) {
-    console.error(`Failed to register hotkey: ${accelerator}`);
-  } else {
-    console.log(`Successfully registered hotkey: ${accelerator}`);
+export function registerHotkey(hotkey: string, callback: () => void): void {
+  try {
+    // Unregister any existing shortcuts first
+    globalShortcut.unregisterAll();
+    
+    // Register the new hotkey
+    const success = globalShortcut.register(hotkey, () => {
+      console.log('Hotkey pressed:', hotkey);
+      callback();
+    });
+
+    if (!success) {
+      throw new Error(`Failed to register hotkey: ${hotkey}`);
+    }
+
+    console.log('Hotkey registered successfully:', hotkey);
+  } catch (error) {
+    console.error('Error registering hotkey:', error);
+    throw error;
   }
 }
 
-export function unregisterHotkey(accelerator: string): void {
-  if (globalShortcut.isRegistered(accelerator)) {
-    globalShortcut.unregister(accelerator);
-    console.log(`Unregistered hotkey: ${accelerator}`);
-  }
-}
-
-export function unregisterAllHotkeys(): void {
+// Cleanup function to unregister all hotkeys
+export function unregisterHotkeys(): void {
   globalShortcut.unregisterAll();
   console.log('Unregistered all hotkeys');
-}
-
-// Define platform-specific hotkey
-export const SCREENSHOT_HOTKEY = process.platform === 'darwin' 
-  ? 'Command+Shift+Control+Space'
-  : 'Ctrl+Shift+Alt+Space'; 
+} 
