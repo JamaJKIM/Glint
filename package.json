@@ -9,6 +9,8 @@
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "make": "electron-forge make",
+    "make:win": "electron-forge make --platform win32",
+    "make:mac": "electron-forge make --platform darwin",
     "package": "electron-forge package"
   },
   "author": "James Kim",
@@ -20,6 +22,7 @@
     "@electron-forge/maker-rpm": "^7.2.0",
     "@electron-forge/maker-squirrel": "^7.2.0",
     "@electron-forge/maker-zip": "^7.2.0",
+    "@electron-forge/publisher-github": "^7.8.0",
     "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
@@ -44,17 +47,31 @@
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
+          "platforms": ["win32"],
           "config": {
             "name": "Glint",
-            "exe": "Glint.exe",
-            "setupExe": "Glint Setup.exe"
+            "setupExe": "Glint Setup.exe",
+            "skipUpdateIcon": true
           }
         },
         {
           "name": "@electron-forge/maker-dmg",
+          "platforms": ["darwin"],
           "config": {
             "name": "Glint",
             "format": "ULFO"
+          }
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "jameskim",
+              "name": "Glint"
+            },
+            "prerelease": false
           }
         }
       ]

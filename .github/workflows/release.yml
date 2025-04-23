@@ -18,20 +18,21 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm install --save-dev @electron-forge/cli @electron-forge/maker-squirrel
-        
+        run: npm install
+
       - name: Build TypeScript
         run: npm run build
-        
-      - name: Create Windows installer
-        run: npx electron-forge make --platform win32 --arch x64
-        
-      - name: Upload Windows installer
+
+      - name: Make Windows Build
+        run: npm run make -- --platform=win32
+
+      - name: Upload Windows Artifacts
         uses: softprops/action-gh-release@v1
         with:
-          files: out/make/squirrel.windows/x64/Glint*.exe
+          files: |
+            out/make/squirrel.windows/x64/Glint*.exe
+            out/make/squirrel.windows/x64/Glint*.nupkg
+            out/make/squirrel.windows/x64/RELEASES
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -47,19 +48,18 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm install --save-dev @electron-forge/cli @electron-forge/maker-dmg
-        
+        run: npm install
+
       - name: Build TypeScript
         run: npm run build
-        
-      - name: Create macOS DMG
-        run: npx electron-forge make --platform darwin --arch x64
-        
-      - name: Upload macOS DMG
+
+      - name: Make macOS Build
+        run: npm run make -- --platform=darwin
+
+      - name: Upload macOS Artifacts
         uses: softprops/action-gh-release@v1
         with:
-          files: out/make/Glint*.dmg
+          files: |
+            out/make/*.dmg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
