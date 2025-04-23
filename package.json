@@ -11,7 +11,9 @@
     "make": "electron-forge make",
     "make:win": "electron-forge make --platform win32",
     "make:mac": "electron-forge make --platform darwin",
-    "package": "electron-forge package"
+    "package": "electron-forge package",
+    "postinstall": "electron-builder install-app-deps",
+    "rebuild": "electron-rebuild -f -w sharp"
   },
   "author": "James Kim",
   "license": "MIT",
@@ -29,6 +31,8 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "electron": "^28.0.0",
+    "electron-builder": "^24.13.3",
+    "electron-rebuild": "^3.2.9",
     "eslint": "^8.0.0",
     "typescript": "^5.0.0"
   },
@@ -40,7 +44,7 @@
     "openai": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sharp": "^0.33.0",
+    "sharp": "^0.34.1",
     "tesseract.js": "^6.0.1"
   },
   "config": {
@@ -48,17 +52,27 @@
       "packagerConfig": {
         "name": "Glint",
         "executableName": "Glint",
-        "asar": true
+        "asar": false,
+        "arch": [
+          "x64"
+        ],
+        "platform": [
+          "win32"
+        ]
       },
       "makers": [
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": ["win32"],
+          "platforms": [
+            "win32"
+          ],
           "config": {}
         },
         {
           "name": "@electron-forge/maker-dmg",
-          "platforms": ["darwin"],
+          "platforms": [
+            "darwin"
+          ],
           "config": {
             "name": "Glint",
             "format": "ULFO"
@@ -76,6 +90,13 @@
             "prerelease": false
           }
         }
+      ]
+    }
+  },
+  "build": {
+    "win": {
+      "asarUnpack": [
+        "node_modules/sharp/**/*"
       ]
     }
   }
