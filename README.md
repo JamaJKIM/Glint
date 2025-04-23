@@ -4,17 +4,24 @@ Glint is a powerful desktop application that allows you to capture screenshots a
 
 ## Quick Start (For Users)
 
-### Download & Install
+### macOS Installation
 1. Go to the [Releases page](https://github.com/JamaJKIM/Glint/releases)
 2. Download `Glint-1.0.0-arm64.dmg`
 3. Double-click the downloaded file
 4. Drag Glint into your Applications folder
 5. Open Glint from your Applications folder
 
+### Windows Installation
+1. Go to the [Releases page](https://github.com/JamaJKIM/Glint/releases)
+2. Download `Glint-Setup-1.0.0.exe`
+3. Run the installer
+4. Follow the installation wizard
+5. Launch Glint from the Start menu
+
 That's it! You're ready to use Glint.
 
 ### Using Glint
-1. Press `Cmd + Shift + X` to take a screenshot
+1. Press `Cmd + Shift + X` (macOS) or `Ctrl + Shift + X` (Windows) to take a screenshot
 2. Select any area on your screen
 3. Get instant AI-powered analysis
 4. Use the chat box to refine the response
@@ -35,6 +42,19 @@ That's it! You're ready to use Glint.
 - For error messages, include any relevant stack traces
 - Use the refinement chat to ask for specific aspects or clarifications
 - Resize the response window using the +/- buttons for better readability
+
+## System Requirements
+
+### Windows
+- Windows 10 or later
+- 4GB RAM minimum
+- 100MB free disk space
+
+### macOS
+- macOS 11 (Big Sur) or later
+- Apple Silicon or Intel processor
+- 4GB RAM minimum
+- 100MB free disk space
 
 ## For Developers
 

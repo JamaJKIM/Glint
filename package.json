@@ -47,7 +47,22 @@
       ]
     },
     "win": {
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "linux": {
       "target": "AppImage"
@@ -69,6 +84,7 @@
     "directories": {
       "output": "release",
       "buildResources": "public"
-    }
+    },
+    "publish": null
   }
 }
