@@ -37,39 +37,39 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "icon": "./assets/icon",
         "name": "Glint",
+        "executableName": "Glint",
+        "icon": "./assets/icon",
         "asar": true,
         "prune": true
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
+          "platforms": ["win32"],
           "config": {
             "name": "Glint",
             "authors": "James Kim",
-            "description": "A smart screenshot tool powered by GPT-4V"
+            "exe": "Glint.exe",
+            "setupExe": "Glint-Setup-Windows.exe",
+            "setupIcon": "./assets/icon.ico"
           }
         },
         {
           "name": "@electron-forge/maker-dmg",
+          "platforms": ["darwin"],
           "config": {
             "name": "Glint",
-            "format": "ULFO",
-            "icon": "./assets/icon.icns"
+            "icon": "./assets/icon.icns",
+            "format": "ULFO"
           }
-        }
-      ],
-      "publishers": [
+        },
         {
-          "name": "@electron-forge/publisher-github",
-          "config": {
-            "repository": {
-              "owner": "JamaJKIM",
-              "name": "Glint"
-            },
-            "prerelease": false
-          }
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin",
+            "win32"
+          ]
         }
       ]
     }
