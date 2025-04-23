@@ -10,15 +10,15 @@
     }
 
     html, body {
-      width: 100vw;
-      height: 100vh;
-      background: transparent !important;
+      width: 100%;
+      height: 100%;
+      background: transparent;
       overflow: hidden;
       -webkit-app-region: no-drag;
     }
 
     body {
-      background: transparent !important;
+      background: transparent;
     }
 
     .overlay {
@@ -29,12 +29,14 @@
       bottom: 0;
       background: transparent;
       cursor: crosshair;
+      display: none;
       -webkit-app-region: no-drag;
       pointer-events: none;
       z-index: 999;
     }
 
     .overlay.active {
+      display: block;
       pointer-events: auto;
     }
 
@@ -45,28 +47,31 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.3);
       pointer-events: none;
     }
 
-    .selection {
+    .selection-box {
       position: absolute;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.05);
       pointer-events: none;
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
     }
 
-    .selection::after {
-      content: '';
+    .selection-handle {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.1);
-      pointer-events: none;
+      width: 8px;
+      height: 8px;
+      background: #007AFF;
+      border: 1px solid white;
+      pointer-events: auto;
     }
+
+    .selection-handle.nw { top: -4px; left: -4px; cursor: nw-resize; }
+    .selection-handle.ne { top: -4px; right: -4px; cursor: ne-resize; }
+    .selection-handle.sw { bottom: -4px; left: -4px; cursor: sw-resize; }
+    .selection-handle.se { bottom: -4px; right: -4px; cursor: se-resize; }
 
     .instructions {
       position: fixed;
@@ -77,16 +82,59 @@
       color: white;
       padding: 8px 16px;
       border-radius: 4px;
-      font-size: 14px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 13px;
+      font-family: "Segoe UI", sans-serif;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.2s;
+      transition: opacity 0.3s;
       z-index: 1000;
     }
 
     .instructions.visible {
       opacity: 1;
+    }
+
+    .dimensions {
+      position: fixed;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: monospace;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* Wine-specific styles */
+    .wine .overlay.active::after {
+      background: rgba(0, 0, 0, 0.7) !important;
+    }
+
+    .wine .selection-box {
+      border: 2px solid #00FF00 !important;
+      background: rgba(0, 255, 0, 0.1) !important;
+    }
+
+    .wine .selection-handle {
+      background: #00FF00 !important;
+      border: 1px solid black !important;
+      width: 10px !important;
+      height: 10px !important;
+    }
+
+    .wine .instructions {
+      background: black !important;
+      color: #00FF00 !important;
+      border: 1px solid #00FF00 !important;
+      opacity: 1 !important;
+    }
+
+    .wine .dimensions {
+      background: black !important;
+      color: #00FF00 !important;
+      border: 1px solid #00FF00 !important;
+      opacity: 1 !important;
     }
 
     #response-windows-container {
@@ -308,12 +356,59 @@
       font-size: 12px;
       color: #333;
     }
+
+    /* Platform-specific styles */
+    .windows .overlay {
+      cursor: crosshair !important;
+    }
+
+    body.win32 {
+      background: transparent;
+    }
+
+    body.win32 .overlay {
+      background: transparent;
+    }
+
+    body.win32 .selection-box {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.05);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    }
+
+    .windows .instructions {
+      background: rgba(0, 0, 0, 0.7);
+      color: rgba(255, 255, 255, 0.9);
+      border: none;
+      font-family: "Segoe UI", sans-serif;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .windows .dimensions {
+      background: rgba(0, 0, 0, 0.7);
+      color: rgba(255, 255, 255, 0.9);
+      border: none;
+      font-family: "Consolas", monospace;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .windows .response-window {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      font-family: "Segoe UI", sans-serif;
+    }
   </style>
 </head>
-<body>
+<body class="win32">
   <div class="overlay">
-    <div class="selection" style="display: none;"></div>
-    <div class="instructions">Click and drag to select an area. Press ESC to cancel.</div>
+    <div class="instructions">Click and drag to select an area</div>
+    <div class="selection-box" style="display: none;"></div>
+    <div class="dimensions" style="display: none;"></div>
   </div>
   <div id="response-windows-container"></div>
   <script>
@@ -335,11 +430,23 @@
     let startY = 0;
     let currentX = 0;
     let currentY = 0;
-    const selection = document.querySelector('.selection');
+    const selectionBox = document.querySelector('.selection-box');
     const overlay = document.querySelector('.overlay');
     const instructions = document.querySelector('.instructions');
     let activeResponseWindow = null;
     let overlayTimeout = null;
+
+    // Check platform
+    const platform = navigator.platform.toLowerCase();
+    const isWindows = platform.includes('win');
+    const isMac = platform.includes('mac');
+    
+    // Add platform-specific class
+    if (isWindows) {
+      document.body.classList.add('windows');
+    } else if (isMac) {
+      document.body.classList.add('mac');
+    }
 
     function activateOverlay() {
       console.log('Activating overlay');
@@ -380,13 +487,13 @@
     }
 
     function hideSelection() {
-      selection.style.display = 'none';
-      selection.style.width = '0';
-      selection.style.height = '0';
+      selectionBox.style.display = 'none';
+      selectionBox.style.width = '0';
+      selectionBox.style.height = '0';
     }
 
     function showSelection() {
-      selection.style.display = 'block';
+      selectionBox.style.display = 'block';
     }
 
     function updateSelection(e) {
@@ -400,10 +507,10 @@
       const left = Math.min(currentX, startX);
       const top = Math.min(currentY, startY);
 
-      selection.style.left = left + 'px';
-      selection.style.top = top + 'px';
-      selection.style.width = width + 'px';
-      selection.style.height = height + 'px';
+      selectionBox.style.left = left + 'px';
+      selectionBox.style.top = top + 'px';
+      selectionBox.style.width = width + 'px';
+      selectionBox.style.height = height + 'px';
     }
 
     overlay.addEventListener('mousedown', (e) => {
@@ -424,8 +531,8 @@
       isSelecting = false;
 
       // Ensure we have valid dimensions
-      const width = parseInt(selection.style.width);
-      const height = parseInt(selection.style.height);
+      const width = parseInt(selectionBox.style.width);
+      const height = parseInt(selectionBox.style.height);
       
       if (width <= 0 || height <= 0) {
         console.log('Invalid selection dimensions, canceling');
@@ -434,8 +541,8 @@
       }
 
       const region = {
-        x: parseInt(selection.style.left),
-        y: parseInt(selection.style.top),
+        x: parseInt(selectionBox.style.left),
+        y: parseInt(selectionBox.style.top),
         width: width,
         height: height
       };
@@ -668,7 +775,7 @@
       if (e.key === 'Escape') {
         if (isSelecting) {
           isSelecting = false;
-          selection.style.display = 'none';
+          selectionBox.style.display = 'none';
           document.removeEventListener('mousemove', handleMouseMove);
           document.removeEventListener('mouseup', handleMouseUp);
         } else {
@@ -699,11 +806,11 @@
       startX = e.clientX;
       startY = e.clientY;
       
-      selection.style.display = 'block';
-      selection.style.left = startX + 'px';
-      selection.style.top = startY + 'px';
-      selection.style.width = '0';
-      selection.style.height = '0';
+      selectionBox.style.display = 'block';
+      selectionBox.style.left = startX + 'px';
+      selectionBox.style.top = startY + 'px';
+      selectionBox.style.width = '0';
+      selectionBox.style.height = '0';
       
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
@@ -721,10 +828,10 @@
       const left = Math.min(startX, currentX);
       const top = Math.min(startY, currentY);
       
-      selection.style.left = left + 'px';
-      selection.style.top = top + 'px';
-      selection.style.width = width + 'px';
-      selection.style.height = height + 'px';
+      selectionBox.style.left = left + 'px';
+      selectionBox.style.top = top + 'px';
+      selectionBox.style.width = width + 'px';
+      selectionBox.style.height = height + 'px';
     }
 
     // Handle mouse up event
@@ -748,7 +855,7 @@
         
         ipcRenderer.send('capture-screenshot', region);
       } else {
-        selection.style.display = 'none';
+        selectionBox.style.display = 'none';
       }
     }
 
@@ -765,7 +872,7 @@
     // Handle overlay deactivation
     ipcRenderer.on('deactivate-overlay', () => {
       overlay.classList.remove('active');
-      selection.style.display = 'none';
+      selectionBox.style.display = 'none';
       isSelecting = false;
     });
 

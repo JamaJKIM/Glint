@@ -12,8 +12,7 @@
     "make:win": "electron-forge make --platform win32",
     "make:mac": "electron-forge make --platform darwin",
     "package": "electron-forge package",
-    "postinstall": "electron-builder install-app-deps",
-    "rebuild": "electron-rebuild -f -w sharp"
+    "postinstall": "electron-builder install-app-deps"
   },
   "author": "James Kim",
   "license": "MIT",
@@ -52,41 +51,25 @@
         "name": "Glint",
         "executableName": "Glint",
         "asar": true,
-        "asarUnpack": [
-          "node_modules/sharp"
-        ],
-        "arch": [
-          "x64"
-        ],
-        "platform": [
-          "win32"
-        ]
+        "arch": ["x64", "arm64"],
+        "platform": ["win32"]
       },
       "makers": [
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "win32"
-          ],
-          "config": {}
+          "platforms": ["win32"],
+          "config": {
+            "arch": ["x64", "arm64"]
+          }
         },
         {
           "name": "@electron-forge/maker-dmg",
-          "platforms": [
-            "darwin"
-          ],
+          "platforms": ["darwin"],
           "config": {
             "name": "Glint",
             "format": "ULFO"
           }
         }
-      ]
-    }
-  },
-  "build": {
-    "win": {
-      "asarUnpack": [
-        "node_modules/sharp/**/*"
       ]
     }
   }
