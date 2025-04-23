@@ -38,27 +38,38 @@
     "forge": {
       "packagerConfig": {
         "icon": "./assets/icon",
-        "name": "Glint"
+        "name": "Glint",
+        "asar": true,
+        "prune": true
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "Glint"
+            "name": "Glint",
+            "authors": "James Kim",
+            "description": "A smart screenshot tool powered by GPT-4V"
           }
         },
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
-            "format": "ULFO"
+            "name": "Glint",
+            "format": "ULFO",
+            "icon": "./assets/icon.icns"
           }
-        },
+        }
+      ],
+      "publishers": [
         {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin",
-            "win32"
-          ]
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "JamaJKIM",
+              "name": "Glint"
+            },
+            "prerelease": false
+          }
         }
       ]
     }
